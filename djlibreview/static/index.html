@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="csrf-token" content="{{CSRF_TOKEN}}">
+  <meta name="bind-origin" content="{{BIND_ORIGIN}}">
+  <meta name="max-upload-mb" content="{{MAX_UPLOAD_MB}}">
+  <title>DJ Library Review</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <a class="skip" href="#results">Skip to review</a>
+  <header class="top wrap">
+    <div>
+      <p class="eyebrow">Local desk · saved inventories only</p>
+      <h1>DJ Library Review</h1>
+      <p class="lede">Inspect conservative filename candidates from a CSV snapshot. A similar name is a candidate to review. It is not confirmed duplicate audio.</p>
+    </div>
+  </header>
+  <div class="band">
+    <p class="wrap evidence-strip" role="note">Filename candidates only. These are not confirmed audio duplicates. Byte evidence: not checked. Audio evidence: not checked. Current files: not verified. A match does not authorize deletion.</p>
+  </div>
+  <p id="example-banner" class="wrap example-banner" hidden>EXAMPLE DATA. Synthetic filenames shipped with this tool. Not your library. Not a scan of this computer.</p>
+  <main class="layout wrap">
+    <section class="panel side" aria-labelledby="import-heading">
+      <h2 id="import-heading">Import a snapshot</h2>
+      <p class="panel-copy">Choosing a CSV sends that file from this browser to the review process at {{BIND_ORIGIN}}. That is this computer only. It is not a hosted upload. Paths inside the file stay text and are not opened.</p>
+      <form id="import-form" action="/api/review" method="post">
+        <label>Dataset label <span class="req">(required)</span>
+          <input id="dataset-label" name="dataset_label" type="text" maxlength="200" autocomplete="off" required>
+          <span class="hint">A name you will recognize on the report, such as Club USB March snapshot.</span>
+        </label>
+        <label>Scope <span class="req">(required)</span>
+          <input id="scope" name="scope" type="text" maxlength="4096" autocomplete="off" spellcheck="false" placeholder="/synthetic/dj-library" required>
+          <span class="hint">Absolute path prefix written in the inventory, such as /Users/you/Music. This desk does not scan that folder.</span>
+        </label>
+        <label>Snapshot date <span class="req">(required)</span>
+          <input id="snapshot-date" name="snapshot_date" type="date" required>
+          <span class="hint">The day this inventory was saved. Required. Not taken from file dates, and not assumed to be today.</span>
+        </label>
+        <label>Path column
+          <input id="path-column" name="path_column" type="text" maxlength="200" autocomplete="off" spellcheck="false" placeholder="path">
+          <span class="hint">Leave blank when the only path header is path, full_path, filepath, or file_path.</span>
+        </label>
+        <label>Saved inventory CSV
+          <input id="inventory-file" name="inventory" type="file" accept=".csv,text/csv">
+        </label>
+        <p id="form-error" class="form-error" role="alert" hidden></p>
+        <button id="review-button" class="primary" type="submit">Review saved inventory</button>
+        <button id="example-button" class="secondary" type="button">Load synthetic example</button>
+      </form>
+      <details class="explain">
+        <summary>How a candidate is chosen</summary>
+        <p>Clean, Dirty, and Super Clean stay apart. Intro and Hype Intro stay apart. Instrumental and Acapella stay apart. Radio Edit and Extended stay apart. VIP and Dub stay apart.</p>
+        <p>A named remix or editor stays in the qualifier, so two different names do not collapse. A BPM transition range stays in the qualifier. Unknown words stay significant. A file with no version tag is unlabeled and uncertain, not Original. A trailing (2) is only a copy hint and is not stripped.</p>
+        <p>This desk would rather miss a candidate than treat different DJ edits as the same file. There is no keep or delete control. Matching text never authorizes a change to a music file.</p>
+        <p>The sample file examples/row_problems.csv shows empty rows, a bad status, and out-of-scope text. Review it with scope /synthetic/dj-library and any real snapshot date.</p>
+      </details>
+    </section>
+    <section class="panel results" id="results" data-review-state="empty" aria-busy="false">
+      <div class="toolbar">
+        <button id="export-button" class="secondary" type="button" disabled>Download review report</button>
+        <p id="export-note" role="status"></p>
+      </div>
+      <form id="filters" class="filters" hidden>
+        <label>Search
+          <input id="q" type="search" name="q" autocomplete="off" placeholder="Filename, path, marker, editor">
+        </label>
+        <label>Version state
+          <select id="version-state" name="version_state" data-empty="Any version state"></select>
+        </label>
+        <label>Marker
+          <select id="marker" name="marker" data-empty="Any marker"></select>
+        </label>
+        <label>Copy hint
+          <select id="copy-hint" name="copy_hint">
+            <option value="any">Any</option>
+            <option value="yes">Has copy hint</option>
+            <option value="no">No copy hint</option>
+          </select>
+        </label>
+      </form>
+      <div id="results-body">
+        <h2>No inventory loaded</h2>
+        <p>Import a saved inventory to see filename candidates. This desk will not scan a folder, read audio, or suggest deletions.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="foot wrap">
+    <p>DJ Library Review {{APP_VERSION}} · engine {{ENGINE_NAME}} {{ENGINE_VERSION}}. This page talks only to {{BIND_ORIGIN}}. No account, no cloud library, no Serato, no folder scan. Stopping the process clears the in-memory review.</p>
+  </footer>
+  <noscript><p class="wrap">This review desk needs JavaScript in the local page. It still does not load remote code.</p></noscript>
+  <script src="/app.js"></script>
+</body>
+</html>

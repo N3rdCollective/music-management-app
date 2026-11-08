@@ -1,0 +1,14 @@
+path,status
+/synthetic/dj-library/house/Ok - Tune (Clean).mp3,ok
+/synthetic/dj-library/backup/Ok - Tune (Clean).mp3,ok
+,ok
+/etc/passwd,ok
+/synthetic/dj-library/house/Bad - Status (Clean).mp3,error
+/synthetic/dj-library/../escape.mp3,ok
+/synthetic/dj-library/house/Note - File.txt,ok
+/synthetic/dj-library/house/Unicode - 東京 (Clean).mp3,ok
+/synthetic/dj-library/backup/Unicode - 東京 (Clean).mp3,ok
+=1+1.mp3,ok
+/synthetic/dj-library/house/<script>alert(1)</script> (Clean).mp3,ok
+/synthetic/dj-library/backup/<script>alert(1)</script> (Clean).mp3,ok
+/not-absolute,ok
